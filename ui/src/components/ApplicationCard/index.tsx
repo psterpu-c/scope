@@ -211,11 +211,12 @@ export const ApplicationCard = ({
           <Stack direction={'column'} gap={'8px'}>
             <Stack direction={'row'} gap={'8px'}>
               <WidgetCard
-                tooltip={`${application.fatalFailures ?? 0} occurences of fatal failures across Intent Recognition, Relevancy, and Groundedness.`}
+                tooltip={`${application.fatalFailures ?? 0} occurences of detections across Intent Recognition, Relevancy, and Groundedness.`}
                 content={
                   <Stack
                     direction={'column'}
                     gap={'4px'}
+                    sx={{ alignItems: 'flex-start' }}
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(
@@ -236,13 +237,13 @@ export const ApplicationCard = ({
                       {application.fatalFailures ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
-                      Fatal
+                      Detections
                     </Typography>
                   </Stack>
                 }
               />
               <WidgetCard
-                tooltip={`${application.minorFailures ?? 0} occurences of minor failures across Intent Recognition, Relevancy, and Groundedness.`}
+                tooltip={`${application.minorFailures ?? 0} occurences of risks across Intent Recognition, Relevancy, and Groundedness.`}
                 content={
                   <Stack
                     direction={'column'}
@@ -267,7 +268,7 @@ export const ApplicationCard = ({
                       {application.minorFailures ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
-                      Minor
+                      Risks
                     </Typography>
                   </Stack>
                 }

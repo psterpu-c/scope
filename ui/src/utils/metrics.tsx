@@ -98,6 +98,18 @@ export const getScoreColor = (score: number, theme: Theme): string => {
   return theme.palette.vars.negativeIconDefault;
 };
 
+/**
+ * Color for a 0-100 health score. Same bands as the HealthScore component:
+ * >=80 excellent, >=60 good, >=40 ok, >=20 poor, otherwise critical.
+ */
+export const getHealthScoreColor = (score: number, theme: Theme): string => {
+  if (score >= 80) return theme.palette.vars.successIconDefault;
+  if (score >= 60) return theme.palette.vars.infoIconDefault;
+  if (score >= 40) return theme.palette.vars.warningIconDefault;
+  if (score >= 20) return theme.palette.vars.severeWarningIconDefault;
+  return theme.palette.vars.negativeIconDefault;
+};
+
 export const getScoreVariant = (score: number): 'teal' | 'amber' | 'blue' => {
   if (score >= 85) return 'teal';
   if (score >= 50) return 'blue';

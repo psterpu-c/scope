@@ -7,7 +7,7 @@ import { PageWithTitle } from '@/components';
 import { PATHS } from '@/routes/routes';
 import { Stack, Typography, useTheme } from '@mui/material';
 import { useParams } from 'react-router-dom';
-import { TAB_NAMES } from '@/pages/ApplicationDetails/MonitorTab';
+import { TAB_NAMES } from '@/pages/ApplicationDetailsLegacy/MonitorTab';
 import {
   useApplicationAgents,
   useAnomalyReportList,

@@ -57,6 +57,13 @@ export * from './CognitiveFailuresBanner';
 export * from './CognitiveFailuresList';
 export * from './ScoreSeverityBadgeLabel';
 export * from './CognitionProtocolsSummary';
+export * from './ApplicationOverview';
+export * from './SegmentedBar';
+export * from './ApplicationProtocolImpact';
+export * from './ApplicationDetailsCognitiveFailures';
+export * from './SessionsWithCognitiveFailures';
+export * from './CognitiveFailureMap';
+export * from './SessionsTableIoC';
 
 export { ApplicationCard, Tags };
 export { PageWithTitle, SpanDrawer };

@@ -5,10 +5,7 @@
 
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 
-import {
-  Applications as ApplicationsIcon,
-  Dashboard as DashboardIcon
-} from '@/assets/icons';
+import { Dashboard as ApplicationsIcon } from '@/assets/icons';
 
 import LayoutWithSideNav from '@/components/LayoutWithSideNav/LayoutWithSideNav';
 
@@ -16,14 +13,20 @@ import Four0Four from '@/pages/404/404';
 import { AppRoute } from '@/routes/types.ts';
 import Applications from '@/pages/Applications';
 import ApplicationDetails from '@/pages/ApplicationDetails';
+import ApplicationDetailsQuality from '@/pages/ApplicationDetailsQuality';
+import ApplicationDetailsPerformance from '@/pages/ApplicationDetailsPerformance';
+import ApplicationDetailsCognitiveHealth from '@/pages/ApplicationDetailsCognitiveHealth';
+import ApplicationDetailsCognitiveFailureMap from '@/pages/ApplicationDetailsCognitiveFailureMap';
 import AgentDetailsPopulation from '@/pages/AgentDetailsPopulation';
-import Dashboard from '@/pages/Dashboard';
 import { agentDetailsRoutes } from '@/pages/AgentDetailsPopulation/AgentDetailsSideBarItemList.tsx';
 export const PATHS = {
-  dashboard: '/dashboard',
-
   applications: '/applications',
   application: '/applications/:applicationId',
+  applicationQuality: '/applications/:applicationId/quality',
+  applicationPerformance: '/applications/:applicationId/performance',
+  applicationCognitiveHealth: '/applications/:applicationId/cognitive-health',
+  applicationCognitiveFailureMap:
+    '/applications/:applicationId/cognitive-health/failure-map',
   agent: '/applications/:applicationId/agents/:agentId',
   applicationOverview: '/applications/:applicationId/overview',
   applicationCollectSession: '/applications/:applicationId/collect/:sessionId',
@@ -54,7 +57,7 @@ export const PATHS = {
 
 export const SETTINGS_PATHS = {};
 
-export const DEFAULT_PATH = PATHS.dashboard;
+export const DEFAULT_PATH = PATHS.applications;
 
 export const settingsRoute = {};
 
@@ -67,15 +70,6 @@ export const routes: {
       name: 'Default',
       path: '/',
       element: <Navigate to={DEFAULT_PATH} />
-    },
-    {
-      name: 'Dashboard',
-      path: PATHS.dashboard,
-      element: <Dashboard />,
-      sideBarProps: {
-        title: 'Dashboard',
-        icon: DashboardIcon
-      }
     },
     {
       name: 'Applications',
@@ -94,7 +88,27 @@ export const routes: {
         {
           name: 'Application',
           path: PATHS.application,
-          element: <Navigate to="overview" replace />
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationQuality',
+          path: PATHS.applicationQuality,
+          element: <ApplicationDetailsQuality />
+        },
+        {
+          name: 'ApplicationPerformance',
+          path: PATHS.applicationPerformance,
+          element: <ApplicationDetailsPerformance />
+        },
+        {
+          name: 'ApplicationCognitiveHealth',
+          path: PATHS.applicationCognitiveHealth,
+          element: <ApplicationDetailsCognitiveHealth />
+        },
+        {
+          name: 'ApplicationCognitiveFailureMap',
+          path: PATHS.applicationCognitiveFailureMap,
+          element: <ApplicationDetailsCognitiveFailureMap />
         },
         {
           name: 'ApplicationTab',

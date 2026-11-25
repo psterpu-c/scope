@@ -10,7 +10,7 @@ import { Box, Stack } from '@mui/material';
 const LayoutWithSideNav = () => {
   return (
     <Stack direction={'column'} sx={{ height: '100%', width: '100%' }}>
-      <Stack direction={'row'} sx={{ flex: 1 }}>
+      <Stack direction={'row'} sx={{ flex: 1, minHeight: 0 }}>
         <Sidebar />
 
         <Box sx={{ overflow: 'hidden', width: '100%' }}>
