@@ -5,15 +5,11 @@
 
 import { List, Stack, useTheme } from '@mui/material';
 import { SideBarItem } from './SideBarItem';
-import { authenticatedRoutes, unauthenticatedRoutes } from '@/routes/routes.tsx';
-import { useLocation } from 'react-router-dom';
+import { authenticatedRoutes, unauthenticatedRoutes, PATHS } from '@/routes/routes.tsx';
+import { useLocation, useMatch } from 'react-router-dom';
 import { AppRoute } from '@/routes/types.ts';
 
-interface SideBarItemListProps {
-  compact?: boolean;
-}
-
-export const SideBarItemList = ({ compact = false }: SideBarItemListProps) => {
+export const SideBarItemList = () => {
   const { pathname } = useLocation();
   const theme = useTheme();
 
@@ -23,6 +19,8 @@ export const SideBarItemList = ({ compact = false }: SideBarItemListProps) => {
   const isUserAuthenticated = true;
 
   const allRoutes = [...unauthenticatedRoutes, ...(isUserAuthenticated ? authenticatedRoutes : [])];
+
+  const isInAgentDetails = !!useMatch(`${PATHS.agent}/*`);
 
   const isParentRouteSelected = (route: AppRoute) => {
     // if (route.children?.length) {
@@ -50,7 +48,7 @@ export const SideBarItemList = ({ compact = false }: SideBarItemListProps) => {
                 {...parentRoute.sideBarProps}
                 selected={isParentRouteSelected(parentRoute)}
                 to={parentRoute.path}
-                compact={compact}
+                compact={isInAgentDetails}
               />
             </Stack>
           ) : null;

@@ -21,7 +21,7 @@ import {
   Card,
   CardContent
 } from '@open-ui-kit/core';
-import { ApplicationIoC } from '@/types/scopeApi.type';
+import { ApplicationWithStatefulEval } from '@/types/scope.type';
 import { CustomTooltip, Tags, WidgetCard } from '..';
 import {
   getDisplayedResultsCount,
@@ -32,10 +32,14 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 
 interface ApplicationCardProps {
-  application: ApplicationIoC;
+  application: ApplicationWithStatefulEval;
+  healthScore: number;
 }
 
-export const ApplicationCard = ({ application }: ApplicationCardProps) => {
+export const ApplicationCard = ({
+  application,
+  healthScore
+}: ApplicationCardProps) => {
   const theme = useTheme();
   const timestamp = parseTimestamp(application.timestamp);
   const applicationDetailsPath = PATHS.application.replace(
@@ -207,11 +211,11 @@ export const ApplicationCard = ({ application }: ApplicationCardProps) => {
           <Stack direction={'column'} gap={'8px'}>
             <Stack direction={'row'} gap={'8px'}>
               <WidgetCard
+                tooltip={`${application.fatalFailures ?? 0} occurences of fatal failures across Intent Recognition, Relevancy, and Groundedness.`}
                 content={
                   <Stack
                     direction={'column'}
                     gap={'4px'}
-                    sx={{ alignItems: 'flex-start' }}
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(
@@ -229,15 +233,16 @@ export const ApplicationCard = ({ application }: ApplicationCardProps) => {
                         color: theme.palette.vars.negativeIconDefault
                       }}
                     >
-                      {application.detections ?? 0}
+                      {application.fatalFailures ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
-                      Detections
+                      Fatal
                     </Typography>
                   </Stack>
                 }
               />
               <WidgetCard
+                tooltip={`${application.minorFailures ?? 0} occurences of minor failures across Intent Recognition, Relevancy, and Groundedness.`}
                 content={
                   <Stack
                     direction={'column'}
@@ -259,10 +264,10 @@ export const ApplicationCard = ({ application }: ApplicationCardProps) => {
                         color: theme.palette.vars.warningIconDefault
                       }}
                     >
-                      {application.risks ?? 0}
+                      {application.minorFailures ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
-                      Risks
+                      Minor
                     </Typography>
                   </Stack>
                 }
@@ -279,9 +284,7 @@ export const ApplicationCard = ({ application }: ApplicationCardProps) => {
                 title={'Health Score'}
                 content={
                   <Typography variant="h5">
-                    {application.healthScore != null
-                      ? `${application.healthScore}%`
-                      : 'N/A'}
+                    {healthScore ? `${healthScore}%` : 'N/A'}
                   </Typography>
                 }
                 description={

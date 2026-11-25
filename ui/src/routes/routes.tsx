@@ -5,7 +5,10 @@
 
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 
-import { Dashboard as ApplicationsIcon } from '@/assets/icons';
+import {
+  Applications as ApplicationsIcon,
+  Dashboard as DashboardIcon
+} from '@/assets/icons';
 
 import LayoutWithSideNav from '@/components/LayoutWithSideNav/LayoutWithSideNav';
 
@@ -13,23 +16,14 @@ import Four0Four from '@/pages/404/404';
 import { AppRoute } from '@/routes/types.ts';
 import Applications from '@/pages/Applications';
 import ApplicationDetails from '@/pages/ApplicationDetails';
-import ApplicationDetailsQuality from '@/pages/ApplicationDetailsQuality';
-import ApplicationDetailsPerformance from '@/pages/ApplicationDetailsPerformance';
-import ApplicationDetailsCognitiveHealth from '@/pages/ApplicationDetailsCognitiveHealth';
-import ApplicationDetailsCognitiveFailureMap from '@/pages/ApplicationDetailsCognitiveFailureMap';
-import SessionDetails from '@/pages/SessionDetails';
-// import AgentDetailsPopulation from '@/pages/AgentDetailsPopulation';
-// import { agentDetailsRoutes } from '@/pages/AgentDetailsPopulation/AgentDetailsSideBarItemList.tsx';
+import AgentDetailsPopulation from '@/pages/AgentDetailsPopulation';
+import Dashboard from '@/pages/Dashboard';
+import { agentDetailsRoutes } from '@/pages/AgentDetailsPopulation/AgentDetailsSideBarItemList.tsx';
 export const PATHS = {
+  dashboard: '/dashboard',
+
   applications: '/applications',
   application: '/applications/:applicationId',
-  applicationQuality: '/applications/:applicationId/quality',
-  applicationPerformance: '/applications/:applicationId/performance',
-  applicationCognitiveHealth: '/applications/:applicationId/cognitive-health',
-  applicationCognitiveFailureMap:
-    '/applications/:applicationId/cognitive-health/failure-map',
-  applicationSessionDetails:
-    '/applications/:applicationId/session-details/:sessionId',
   agent: '/applications/:applicationId/agents/:agentId',
   applicationOverview: '/applications/:applicationId/overview',
   applicationCollectSession: '/applications/:applicationId/collect/:sessionId',
@@ -60,7 +54,7 @@ export const PATHS = {
 
 export const SETTINGS_PATHS = {};
 
-export const DEFAULT_PATH = PATHS.applications;
+export const DEFAULT_PATH = PATHS.dashboard;
 
 export const settingsRoute = {};
 
@@ -73,6 +67,15 @@ export const routes: {
       name: 'Default',
       path: '/',
       element: <Navigate to={DEFAULT_PATH} />
+    },
+    {
+      name: 'Dashboard',
+      path: PATHS.dashboard,
+      element: <Dashboard />,
+      sideBarProps: {
+        title: 'Dashboard',
+        icon: DashboardIcon
+      }
     },
     {
       name: 'Applications',
@@ -91,86 +94,59 @@ export const routes: {
         {
           name: 'Application',
           path: PATHS.application,
-          element: <ApplicationDetails />
-        },
-        {
-          name: 'ApplicationQuality',
-          path: PATHS.applicationQuality,
-          element: <ApplicationDetailsQuality />
-        },
-        {
-          name: 'ApplicationPerformance',
-          path: PATHS.applicationPerformance,
-          element: <ApplicationDetailsPerformance />
-        },
-        {
-          name: 'ApplicationCognitiveHealth',
-          path: PATHS.applicationCognitiveHealth,
-          element: <ApplicationDetailsCognitiveHealth />
-        },
-        {
-          name: 'ApplicationCognitiveFailureMap',
-          path: PATHS.applicationCognitiveFailureMap,
-          element: <ApplicationDetailsCognitiveFailureMap />
-        },
-        {
-          name: 'ApplicationSessionDetails',
-          path: PATHS.applicationSessionDetails,
-          element: <SessionDetails />
+          element: <Navigate to="overview" replace />
         },
         {
           name: 'ApplicationTab',
           path: '/applications/:applicationId/:tab',
           element: <ApplicationDetails />
         },
-        // Not used in the current UI (the former application tabs and the
-        // agent details, which nothing in the current UI links to).
-        // {
-        //   name: 'ApplicationCollectCompleted',
-        //   path: PATHS.applicationCollectCompleted,
-        //   element: <ApplicationDetails />
-        // },
-        // {
-        //   name: 'ApplicationCollectLiveSessions',
-        //   path: PATHS.applicationCollectLiveSessions,
-        //   element: <ApplicationDetails />
-        // },
-        // {
-        //   name: 'ApplicationCollectLiveSession',
-        //   path: PATHS.applicationCollectLiveSession,
-        //   element: <ApplicationDetails />
-        // },
-        // {
-        //   name: 'ApplicationCollectSessionTab',
-        //   path: PATHS.applicationCollectSessionTab,
-        //   element: <ApplicationDetails />
-        // },
-        // {
-        //   name: 'ApplicationCollectSession',
-        //   path: PATHS.applicationCollectSession,
-        //   element: <ApplicationDetails />
-        // },
-        // {
-        //   name: 'ApplicationMonitorSubTab',
-        //   path: '/applications/:applicationId/monitor/:monitorTab',
-        //   element: <ApplicationDetails />
-        // },
-        // {
-        //   name: 'ApplicationAnalyzeSubTab',
-        //   path: '/applications/:applicationId/analyze/:analyzeTab',
-        //   element: <ApplicationDetails />
-        // },
+        {
+          name: 'ApplicationCollectCompleted',
+          path: PATHS.applicationCollectCompleted,
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationCollectLiveSessions',
+          path: PATHS.applicationCollectLiveSessions,
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationCollectLiveSession',
+          path: PATHS.applicationCollectLiveSession,
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationCollectSessionTab',
+          path: PATHS.applicationCollectSessionTab,
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationCollectSession',
+          path: PATHS.applicationCollectSession,
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationMonitorSubTab',
+          path: '/applications/:applicationId/monitor/:monitorTab',
+          element: <ApplicationDetails />
+        },
+        {
+          name: 'ApplicationAnalyzeSubTab',
+          path: '/applications/:applicationId/analyze/:analyzeTab',
+          element: <ApplicationDetails />
+        },
         {
           name: 'ApplicationAnalyzeSemanticGroup',
           path: '/applications/:applicationId/analyze/:analyzeTab/:semanticGroup',
           element: <ApplicationDetails />
+        },
+        {
+          name: 'AgentDetails',
+          path: PATHS.agent,
+          element: <AgentDetailsPopulation />,
+          children: agentDetailsRoutes
         }
-        // {
-        //   name: 'AgentDetails',
-        //   path: PATHS.agent,
-        //   element: <AgentDetailsPopulation />,
-        //   children: agentDetailsRoutes
-        // }
       ]
     }
   ],

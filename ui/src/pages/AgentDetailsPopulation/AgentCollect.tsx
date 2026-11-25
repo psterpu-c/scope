@@ -25,7 +25,7 @@ import { useDebouncedValue } from '@/utils';
 import { useApplicationAgents, useApplicationSessions } from '@/api/scopeApi';
 import { useMemo } from 'react';
 import { DEFAULT_END_DATE, DEFAULT_START_DATE } from '@/common/constants';
-import { TAB_NAMES } from '@/pages/ApplicationDetailsLegacy/MonitorTab';
+import { TAB_NAMES } from '@/pages/ApplicationDetails/MonitorTab';
 
 export const AgentCollect = () => {
   const { startDate, endDate, setStartDate, setEndDate } = useTimeRangeStore();

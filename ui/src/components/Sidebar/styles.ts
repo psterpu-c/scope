@@ -7,7 +7,7 @@ import { Theme, SxProps } from '@mui/material';
 import { GLOBAL_BACKGROUND_COLOR } from '@/common/styles';
 
 export const openDrawerWidth = 244;
-export const compactDrawerWidth = 56;
+export const compactDrawerWidth = 92;
 
 export const sideBarItemLinkStyle = (theme: Theme): React.CSSProperties => {
   return {
@@ -130,15 +130,6 @@ export const sideBarTooltip = (theme: Theme) => {
     position: 'relative'
   } as React.CSSProperties;
 };
-
-export const sideBarToggleButtonStyle = (theme: Theme): SxProps<Theme> => ({
-  borderRadius: '8px',
-  padding: '8px',
-  color: theme.palette.vars.controlIconDefault,
-  '&:hover': {
-    backgroundColor: theme.palette.vars.baseBorderMedium
-  }
-});
 
 export const previewIconStyle: SxProps<Theme> = {
   '.MuiSvgIcon-root': {

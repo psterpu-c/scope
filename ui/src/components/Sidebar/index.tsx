@@ -3,73 +3,36 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
-import {
-  Box,
-  Drawer,
-  IconButton,
-  Stack,
-  SvgIcon,
-  useTheme
-} from '@mui/material';
+import { Box, Drawer, Stack, useTheme } from '@mui/material';
 import { SideBarItemList } from './SideBarItemList';
-import {
-  sideBarDrawerStyle,
-  sideBarPaperStyle,
-  sideBarToggleButtonStyle
-} from './styles';
+import { sideBarDrawerStyle, sideBarPaperStyle } from './styles';
+import { useMatch } from 'react-router-dom';
+import { PATHS } from '@/routes/routes.tsx';
+
 export const Sidebar = () => {
   const theme = useTheme();
 
-  // Collapsed (icons only) by default, on every page
-  const [collapsed, setCollapsed] = useState(true);
-
-  const isCompact = collapsed;
+  const isInAgentDetails = !!useMatch(`${PATHS.agent}/*`);
 
   return (
-    <Box sx={sideBarDrawerStyle(theme, isCompact)}>
+    <Box sx={sideBarDrawerStyle(theme, isInAgentDetails)}>
       <Drawer
         variant="permanent"
         anchor="left"
         slotProps={{
           paper: {
-            sx: sideBarPaperStyle(theme, isCompact)
+            sx: sideBarPaperStyle(theme, isInAgentDetails)
           }
         }}
-        sx={sideBarDrawerStyle(theme, isCompact)}
+        sx={sideBarDrawerStyle(theme, isInAgentDetails)}
         data-testid="sidebar"
       >
         <Stack
           direction="column"
-          justifyContent="space-between"
+          gap={'16px'}
           sx={{ height: '100%', paddingLeft: '8px', paddingRight: '8px' }}
         >
-          <SideBarItemList compact={collapsed} />
-
-          <Box sx={{ paddingBottom: '16px' }}>
-            <IconButton
-              onClick={() => setCollapsed((prev) => !prev)}
-              aria-label={
-                collapsed
-                  ? 'Expand side navigation'
-                  : 'Collapse side navigation'
-              }
-              aria-expanded={!collapsed}
-              title={collapsed ? 'Expand' : 'Collapse'}
-              data-testid="sidebar-toggle"
-              sx={sideBarToggleButtonStyle(theme)}
-            >
-              <SvgIcon fontSize="small">
-                {collapsed ? (
-                  // chevron right
-                  <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z" />
-                ) : (
-                  // chevron left
-                  <path d="M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6z" />
-                )}
-              </SvgIcon>
-            </IconButton>
-          </Box>
+          <SideBarItemList />
         </Stack>
       </Drawer>
     </Box>

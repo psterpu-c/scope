@@ -3,21 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  useTheme
-} from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
-import {
-  sideBarItemLinkStyle,
-  sideBarListItemTextStyle,
-  siteBarItemStyle,
-  previewIconStyle
-} from './styles';
+import { sideBarItemLinkStyle, sideBarListItemTextStyle, siteBarItemStyle, previewIconStyle } from './styles';
 import { LegacyIcons } from '@open-ui-kit/core';
 import { SideBarProps } from '@/routes/types.ts';
 
@@ -31,17 +19,7 @@ export interface SideBarItemProps extends SideBarProps {
 }
 
 export const SideBarItem = (props: SideBarItemProps) => {
-  const {
-    selected,
-    icon: Icon,
-    title,
-    to,
-    disabled,
-    hidden,
-    preview,
-    itemLevel = 0,
-    compact = false
-  } = props;
+  const { selected, icon: Icon, title, to, disabled, hidden, preview, itemLevel = 0, compact = false } = props;
 
   const theme = useTheme();
 
@@ -56,38 +34,12 @@ export const SideBarItem = (props: SideBarItemProps) => {
         ...style.listItem
       }}
     >
-      <ListItemButton
-        selected={selected}
-        sx={{
-          ...style.listItemButton,
-          ...(compact ? { paddingLeft: '8px', paddingRight: '8px' } : {})
-        }}
-        disableRipple
-        disabled={disabled}
-        role="sidebar-list-item"
-      >
-        <Link
-          to={to}
-          style={{
-            ...sideBarItemLinkStyle(theme),
-            ...(compact ? { justifyContent: 'center' } : {})
-          }}
-          role="sidebar-link"
-          title={compact ? title : undefined}
-        >
-          <ListItemIcon
-            sx={{ ...style.listItemIcon, ...(compact ? { minWidth: 0 } : {}) }}
-          >
-            {Icon && <Icon sx={style.listItemIconNode} />}
-          </ListItemIcon>
+      <ListItemButton selected={selected} sx={style.listItemButton} disableRipple disabled={disabled} role="sidebar-list-item">
+        <Link to={to} style={sideBarItemLinkStyle(theme)} role="sidebar-link" title={compact ? title : undefined}>
+          <ListItemIcon sx={style.listItemIcon}>{Icon && <Icon sx={style.listItemIconNode} />}</ListItemIcon>
           {!compact && (
             // @ts-ignore
-            <ListItemText
-              primary={
-                <Typography variant={'captionSemibold'}>{title}</Typography>
-              }
-              sx={sideBarListItemTextStyle()}
-            />
+            <ListItemText primary={<Typography variant={'captionSemibold'}>{title}</Typography>} sx={sideBarListItemTextStyle()} />
           )}
         </Link>
         {preview && (

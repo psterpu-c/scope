@@ -33,7 +33,7 @@ const App = () => {
               }}
             >
               <TopBar />
-              <Box sx={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>{appRoutes}</Box>
+              <Box sx={{ flex: 1 }}>{appRoutes}</Box>
             </Box>
           </Router>
         </ThemeProvider>

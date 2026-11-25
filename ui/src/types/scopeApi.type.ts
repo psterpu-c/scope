@@ -9,18 +9,6 @@ export interface ApplicationsResponse {
   applications: Application[];
 }
 
-// The applications with their detections and risks counts and health score.
-export interface ApplicationIoC extends Application {
-  detections: number;
-  risks: number;
-  // 0-100, the average of the quality, performance and cognitive health scores.
-  healthScore: number;
-}
-
-export interface ApplicationsIoCResponse {
-  applications: ApplicationIoC[];
-}
-
 export interface LiveSession {
   session_id: string;
   start_time: string;

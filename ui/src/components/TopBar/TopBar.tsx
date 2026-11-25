@@ -31,7 +31,7 @@ const TopBar = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '8px 16px'
+            padding: '8px 36px'
           }
         }}
       >

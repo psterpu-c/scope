@@ -7,7 +7,7 @@ import { PageWithTitle } from '@/components';
 import { pageGradientBottomLeftSx, pageGradientContentSx } from '@/common/styles';
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { ApplicationsGridIoC } from './ApplicationsGridIoC';
+import { ApplicationsGrid } from './ApplicationsGrid';
 
 const Applications = () => {
   const theme = useTheme();
@@ -22,7 +22,7 @@ const Applications = () => {
         }
         sx={pageGradientContentSx}
       >
-        <ApplicationsGridIoC />
+        <ApplicationsGrid />
       </PageWithTitle>
     </Box>
   );
