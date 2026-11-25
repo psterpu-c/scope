@@ -12,7 +12,7 @@ import {
   PageWithTitle,
   StaticTopology
 } from '@/components';
-import { useApplications } from '@/api/scopeApi';
+import { useApplicationsIoC } from '@/api/scopeApi';
 import { pageGradientBottomSx, pageGradientContentSx } from '@/common/styles';
 import { PATHS } from '@/routes/routes.tsx';
 import type { Application } from '@/types/scope.type';
@@ -21,7 +21,7 @@ const ApplicationDetails = () => {
   const theme = useTheme();
   const { applicationId } = useParams();
 
-  const { data: applicationList } = useApplications();
+  const { data: applicationList } = useApplicationsIoC();
   const applicationDescription =
     applicationList?.applications.find(
       (application: Application) =>

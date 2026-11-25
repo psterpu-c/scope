@@ -21,6 +21,7 @@ import {
 import { CONFIDENCE_LABELS } from '@/common/cognitiveFailureConfidence';
 import { getCognitiveFailureTaxonomy } from '@/common/cognitiveFailureTaxonomy';
 import {
+  CognitiveFailureImpactedSession,
   CognitiveFailurePattern,
   CognitiveFailurePatternLevel
 } from '@/types/scope.type';
@@ -67,6 +68,7 @@ const pluralize = (count: number, singular: string): string =>
 
 export interface ApplicationDetailsCognitiveFailuresProps {
   applicationId: string;
+  onSessionClick?: (session: CognitiveFailureImpactedSession) => void;
   startTime: number;
   endTime: number;
   failurePatterns: CognitiveFailurePattern[];
@@ -76,6 +78,7 @@ export interface ApplicationDetailsCognitiveFailuresProps {
 // patterns on the left and the details of the selected one on the right.
 export const ApplicationDetailsCognitiveFailures = ({
   applicationId,
+  onSessionClick,
   startTime,
   endTime,
   failurePatterns
@@ -280,6 +283,7 @@ export const ApplicationDetailsCognitiveFailures = ({
 
         <SessionsWithCognitiveFailures
           applicationId={applicationId}
+          onSessionClick={onSessionClick}
           startTime={startTime}
           endTime={endTime}
           failureCode={pattern.code}

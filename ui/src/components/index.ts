@@ -64,6 +64,8 @@ export * from './ApplicationDetailsCognitiveFailures';
 export * from './SessionsWithCognitiveFailures';
 export * from './CognitiveFailureMap';
 export * from './SessionsTableIoC';
+export * from './DateInterval';
+export * from './SessionMetrics';
 
 export { ApplicationCard, Tags };
 export { PageWithTitle, SpanDrawer };

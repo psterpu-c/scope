@@ -44,6 +44,7 @@ import {
 } from '@/types/scope.type';
 import {
   ApplicationsResponse,
+  ApplicationsIoCResponse,
   ApplicationStatefulEvalTotals,
   LiveSession,
   LiveSessionsResponse,
@@ -72,6 +73,38 @@ export const useApplications = () => {
   return useQuery<ApplicationsResponse>({
     queryKey: ['applications'],
     queryFn: () => fetchApplications()
+  });
+};
+
+// Mocked applications endpoint: the applications with their `detections` and
+// `risks` counts and `healthScore`. Fetches the real applications and adds the
+// three fields.
+// TODO: replace with a real endpoint (proposed: GET /ui/applications-overview).
+const fetchApplicationsIoC = async (): Promise<ApplicationsIoCResponse> => {
+  const { applications } = await fetchApplications();
+
+  return {
+    applications: applications.map((application) => {
+      const hash = hashString(application.applicationName);
+      // The health score is the average of the quality, performance and
+      // cognitive health scores (mocked here).
+      const quality = hash % 101;
+      const performance = (hash >>> 4) % 101;
+      const cognitiveHealth = (hash >>> 8) % 101;
+      return {
+        ...application,
+        detections: hash % 40,
+        risks: (hash >>> 3) % 120,
+        healthScore: Math.round((quality + performance + cognitiveHealth) / 3)
+      };
+    })
+  };
+};
+
+export const useApplicationsIoC = () => {
+  return useQuery<ApplicationsIoCResponse>({
+    queryKey: ['applicationsIoC'],
+    queryFn: () => fetchApplicationsIoC()
   });
 };
 

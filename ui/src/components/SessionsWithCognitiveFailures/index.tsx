@@ -22,6 +22,7 @@ import { formatDurationMs } from '@/utils/stringUtils';
 import { StatusTag } from '../CognitionProtocols/primitives';
 import { shortProtocolName } from '../CognitionProtocolsSummary/utils';
 import Tags from '../Tags';
+import { DateInterval } from '../DateInterval';
 
 type MRT_ColumnDefList = TableProps<CognitiveFailureImpactedSession>['columns'];
 
@@ -33,6 +34,7 @@ const pluralize = (count: number, singular: string): string =>
 
 export interface SessionsWithCognitiveFailuresProps {
   applicationId: string;
+  onSessionClick?: (session: CognitiveFailureImpactedSession) => void;
   startTime: number;
   endTime: number;
   // Taxonomy code of the cognitive failure, e.g. 'IR-1'
@@ -47,6 +49,7 @@ export interface SessionsWithCognitiveFailuresProps {
 // their traces and spans.
 export const SessionsWithCognitiveFailures = ({
   applicationId,
+  onSessionClick,
   startTime,
   endTime,
   failureCode,
@@ -193,6 +196,7 @@ export const SessionsWithCognitiveFailures = ({
     isLoading,
     rowCount: sessions.length,
     title: { label: 'Impacted sessions' },
+    titleExtension: <DateInterval startTime={startTime} endTime={endTime} />,
     topToolbarProps: {
       export: { enableExport: false }
     },
@@ -208,11 +212,10 @@ export const SessionsWithCognitiveFailures = ({
     state: { columnVisibility },
     onColumnVisibilityChange: setColumnVisibility,
 
-    muiTableBodyRowProps: {
-      onClick: (event: React.MouseEvent<HTMLTableRowElement>) => {
-        console.log(event);
-      }
-    },
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: () => onSessionClick?.(row.original),
+      sx: { cursor: onSessionClick ? 'pointer' : 'default' }
+    }),
 
     // Shrink the footer "Rows per page" Select, whose width the kit hard-codes
     // (same override as in SessionsTable).

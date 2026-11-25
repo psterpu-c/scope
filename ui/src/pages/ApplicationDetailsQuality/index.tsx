@@ -10,6 +10,7 @@ import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import {
   CustomTooltip,
+  DateInterval,
   IntervalPicker,
   MetricChart,
   PageWithTitle,
@@ -23,6 +24,7 @@ import {
 import { useApplicationSummaryMetrics } from '@/api/scopeApi';
 import { pageGradientBottomSx, pageGradientContentSx } from '@/common/styles';
 import { PATHS } from '@/routes/routes.tsx';
+import { useOpenSessionDetails } from '@/hooks/useOpenSessionDetails';
 import { useTimeRangeStore } from '@/store';
 import {
   ApplicationSummaryMetricsValue,
@@ -57,6 +59,7 @@ const chartGridSize = { xxl: 6, xl: 12, lg: 12, md: 12, sm: 12, xs: 12 };
 
 const ApplicationDetailsQuality = () => {
   const { applicationId = '' } = useParams();
+  const openSessionDetails = useOpenSessionDetails(applicationId, 'Quality');
   const navigate = useNavigate();
   const theme = useTheme();
   const { startDate, endDate, setStartDate, setEndDate } = useTimeRangeStore();
@@ -223,16 +226,23 @@ const ApplicationDetailsQuality = () => {
         sx={pageGradientContentSx}
       >
         <Stack direction="column" gap="32px" sx={{ width: '100%' }}>
-          <IntervalPicker
-            startDate={startDate}
-            endDate={endDate}
-            setStartDate={setStartDate}
-            setEndDate={setEndDate}
-          />
+          <Stack direction="column" gap="4px">
+            <IntervalPicker
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+            <DateInterval
+              startTime={debouncedStartDate}
+              endTime={debouncedEndDate}
+            />
+          </Stack>
           {renderContent()}
           <Box sx={{ width: '100%', overflow: 'auto' }}>
             <SessionsTableIoC
               applicationId={applicationId}
+              onSessionClick={openSessionDetails}
               startTime={debouncedStartDate}
               endTime={debouncedEndDate}
             />

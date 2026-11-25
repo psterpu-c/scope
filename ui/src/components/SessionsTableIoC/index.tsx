@@ -21,6 +21,7 @@ import { formatDurationMs } from '@/utils/stringUtils';
 import { StatusTag } from '../CognitionProtocols/primitives';
 import { shortProtocolName } from '../CognitionProtocolsSummary/utils';
 import Tags from '../Tags';
+import { DateInterval } from '../DateInterval';
 
 type MRT_ColumnDefList = TableProps<CognitiveFailureImpactedSession>['columns'];
 
@@ -179,15 +180,7 @@ export const SessionsTableIoC = ({
     title: { label: title },
     titleExtension:
       showDateInterval && startTime && endTime ? (
-        <Stack direction="row" gap={'8px'} alignItems={'center'}>
-          <Typography variant={'body2Semibold'}>
-            {format(new Date(startTime * 1000), 'MMM d, yyyy HH:mm:ss')}
-          </Typography>
-          <Typography variant={'body2Semibold'}>-</Typography>
-          <Typography variant={'body2Semibold'}>
-            {format(new Date(endTime * 1000), 'MMM d, yyyy HH:mm:ss')}
-          </Typography>
-        </Stack>
+        <DateInterval startTime={startTime} endTime={endTime} />
       ) : undefined,
     topToolbarProps: {
       export: { enableExport: false }

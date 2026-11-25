@@ -18,11 +18,14 @@ import {
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import {
   ApplicationDetailsCognitiveFailures,
+  DateInterval,
+  IntervalPicker,
   PageWithTitle
 } from '@/components';
 import { useCognitiveHealthDetails } from '@/api/scopeApi';
 import { pageGradientBottomSx, pageGradientContentSx } from '@/common/styles';
 import { PATHS } from '@/routes/routes.tsx';
+import { useOpenSessionDetails } from '@/hooks/useOpenSessionDetails';
 import { useTimeRangeStore } from '@/store';
 import { useDebouncedValue } from '@/utils';
 
@@ -33,8 +36,12 @@ const GAUGE_GLOW_SCALE = 0.4;
 
 const ApplicationDetailsCognitiveHealth = () => {
   const { applicationId = '' } = useParams();
+  const openSessionDetails = useOpenSessionDetails(
+    applicationId,
+    'Cognitive Health'
+  );
   const theme = useTheme();
-  const { startDate, endDate } = useTimeRangeStore();
+  const { startDate, endDate, setStartDate, setEndDate } = useTimeRangeStore();
   const debouncedStartDate = useDebouncedValue(startDate, 500);
   const debouncedEndDate = useDebouncedValue(endDate, 500);
 
@@ -191,6 +198,7 @@ const ApplicationDetailsCognitiveHealth = () => {
 
         <ApplicationDetailsCognitiveFailures
           applicationId={applicationId}
+          onSessionClick={openSessionDetails}
           startTime={debouncedStartDate}
           endTime={debouncedEndDate}
           failurePatterns={data.failurePatterns}
@@ -226,7 +234,21 @@ const ApplicationDetailsCognitiveHealth = () => {
         breadcrumbItems={breadcrumbItems}
         sx={pageGradientContentSx}
       >
-        {renderContent()}
+        <Stack direction="column" gap="32px" sx={{ width: '100%' }}>
+          <Stack direction="column" gap="4px">
+            <IntervalPicker
+              startDate={startDate}
+              endDate={endDate}
+              setStartDate={setStartDate}
+              setEndDate={setEndDate}
+            />
+            <DateInterval
+              startTime={debouncedStartDate}
+              endTime={debouncedEndDate}
+            />
+          </Stack>
+          {renderContent()}
+        </Stack>
       </PageWithTitle>
     </Box>
   );

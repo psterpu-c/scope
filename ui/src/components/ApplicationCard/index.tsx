@@ -21,7 +21,7 @@ import {
   Card,
   CardContent
 } from '@open-ui-kit/core';
-import { ApplicationWithStatefulEval } from '@/types/scope.type';
+import { ApplicationIoC } from '@/types/scopeApi.type';
 import { CustomTooltip, Tags, WidgetCard } from '..';
 import {
   getDisplayedResultsCount,
@@ -32,14 +32,10 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 
 interface ApplicationCardProps {
-  application: ApplicationWithStatefulEval;
-  healthScore: number;
+  application: ApplicationIoC;
 }
 
-export const ApplicationCard = ({
-  application,
-  healthScore
-}: ApplicationCardProps) => {
+export const ApplicationCard = ({ application }: ApplicationCardProps) => {
   const theme = useTheme();
   const timestamp = parseTimestamp(application.timestamp);
   const applicationDetailsPath = PATHS.application.replace(
@@ -211,7 +207,6 @@ export const ApplicationCard = ({
           <Stack direction={'column'} gap={'8px'}>
             <Stack direction={'row'} gap={'8px'}>
               <WidgetCard
-                tooltip={`${application.fatalFailures ?? 0} occurences of detections across Intent Recognition, Relevancy, and Groundedness.`}
                 content={
                   <Stack
                     direction={'column'}
@@ -234,7 +229,7 @@ export const ApplicationCard = ({
                         color: theme.palette.vars.negativeIconDefault
                       }}
                     >
-                      {application.fatalFailures ?? 0}
+                      {application.detections ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
                       Detections
@@ -243,7 +238,6 @@ export const ApplicationCard = ({
                 }
               />
               <WidgetCard
-                tooltip={`${application.minorFailures ?? 0} occurences of risks across Intent Recognition, Relevancy, and Groundedness.`}
                 content={
                   <Stack
                     direction={'column'}
@@ -265,7 +259,7 @@ export const ApplicationCard = ({
                         color: theme.palette.vars.warningIconDefault
                       }}
                     >
-                      {application.minorFailures ?? 0}
+                      {application.risks ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
                       Risks
@@ -285,7 +279,9 @@ export const ApplicationCard = ({
                 title={'Health Score'}
                 content={
                   <Typography variant="h5">
-                    {healthScore ? `${healthScore}%` : 'N/A'}
+                    {application.healthScore != null
+                      ? `${application.healthScore}%`
+                      : 'N/A'}
                   </Typography>
                 }
                 description={

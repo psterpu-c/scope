@@ -26,10 +26,12 @@ import {
   COGNITIVE_FAILURE_FUNCTIONS,
   COGNITIVE_FAILURE_LOCI,
   COGNITIVE_FAILURE_MAP,
+  CognitiveFailureFixAt,
   CognitiveFailureFunction,
   CognitiveFailureLocus,
   getCognitiveFailureLocus
 } from '@/common/cognitiveFailureTaxonomy';
+import { CognitiveFailureDrawer } from './CognitiveFailureDrawer';
 
 // Accent of each cognitive function: the dot of the filter, the left edge of
 // the cards and the tag of the card.
@@ -66,8 +68,9 @@ interface Challenge {
   locus: CognitiveFailureLocus;
   title: string;
   description: string;
+  failureMechanism: string;
   function: CognitiveFailureFunction;
-  fixAt: string;
+  fixAt: CognitiveFailureFixAt[];
 }
 
 const CHALLENGES: Challenge[] = Object.entries(COGNITIVE_FAILURE_MAP).map(
@@ -76,6 +79,7 @@ const CHALLENGES: Challenge[] = Object.entries(COGNITIVE_FAILURE_MAP).map(
     locus: getCognitiveFailureLocus(code),
     title: entry.title,
     description: entry.description,
+    failureMechanism: entry.failureMechanism,
     function: entry.function,
     fixAt: entry.fixAt
   })
@@ -103,6 +107,18 @@ export const CognitiveFailureMap = () => {
   const [locusIndex, setLocusIndex] = useState(0);
   // Index into the function tabs; 0 is "All functions".
   const [functionIndex, setFunctionIndex] = useState(0);
+  // The challenge shown in the drawer. Kept when the drawer closes, so its
+  // content doesn't disappear during the closing animation.
+  const [selectedCode, setSelectedCode] = useState<string>();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const openChallenge = (code: string) => {
+    setSelectedCode(code);
+    setIsDrawerOpen(true);
+  };
+  const selectedChallenge = CHALLENGES.find(
+    (challenge) => challenge.code === selectedCode
+  );
 
   const borderColor = theme.palette.vars.baseBorderMedium;
   const mutedText = theme.palette.vars.baseTextMedium;
@@ -162,11 +178,24 @@ export const CognitiveFailureMap = () => {
     return (
       <Box
         key={challenge.code}
+        role="button"
+        tabIndex={0}
+        onClick={() => openChallenge(challenge.code)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openChallenge(challenge.code);
+          }
+        }}
         sx={{
+          cursor: 'pointer',
           padding: '12px 16px',
           borderRadius: '8px',
           border: `1px solid ${borderColor}`,
-          borderLeft: `2px solid ${style.color}`
+          borderLeft: `2px solid ${style.color}`,
+          '&:hover': {
+            backgroundColor: theme.palette.vars.baseBackgroundMedium
+          }
         }}
       >
         <Stack
@@ -196,7 +225,9 @@ export const CognitiveFailureMap = () => {
           {challenge.description}
         </Typography>
         <Box sx={{ mt: '8px' }}>
-          <Tag size={GeneralSize.Small}>{`Fix at ${challenge.fixAt}`}</Tag>
+          <Tag
+            size={GeneralSize.Small}
+          >{`Fix at ${challenge.fixAt.join(', ')}`}</Tag>
         </Box>
       </Box>
     );
@@ -314,6 +345,24 @@ export const CognitiveFailureMap = () => {
       >
         {visibleLoci.map(renderLocusColumn)}
       </Box>
+
+      {selectedChallenge && (
+        <CognitiveFailureDrawer
+          open={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          code={selectedChallenge.code}
+          title={selectedChallenge.title}
+          locusLabel={
+            COGNITIVE_FAILURE_LOCI.find(
+              (locus) => locus.value === selectedChallenge.locus
+            )?.label ?? ''
+          }
+          functionLabel={selectedChallenge.function}
+          accentColor={LOCUS_COLORS[selectedChallenge.locus]}
+          failureMechanism={selectedChallenge.failureMechanism}
+          fixAt={selectedChallenge.fixAt}
+        />
+      )}
     </Stack>
   );
 };

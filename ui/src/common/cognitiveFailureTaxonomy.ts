@@ -37,8 +37,11 @@ export interface CognitiveFailureTaxonomyEntry {
   // without them is not shown on the map.
   // One-line description shown on the map card.
   shortDescription?: string;
+  // What goes wrong, shown in the details of the failure on the map.
+  failureMechanism?: string;
   function?: CognitiveFailureFunction;
-  fixAt?: CognitiveFailureFixAt;
+  // The stages at which the failure is best fixed.
+  fixAt?: CognitiveFailureFixAt[];
 }
 
 export const COGNITIVE_FAILURE_TAXONOMY: Record<
@@ -50,31 +53,36 @@ export const COGNITIVE_FAILURE_TAXONOMY: Record<
     title: 'Instruction Retention Failure',
     summary: 'Agent loses earlier instructions as its context window fills.',
     shortDescription: 'Earlier instructions fall out of context.',
+    failureMechanism: 'Agent loses earlier instructions as its context fills.',
     function: 'Representational',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'IC-1': {
     title: 'Intention Stability Failure',
     summary: 'Agent has the right commitment but drops it under interference.',
     shortDescription: 'An agent abandons a correct commitment too early.',
+    failureMechanism: 'Agent drops a correct commitment under interference.',
     function: 'Coordinative',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'IC-2': {
     title: 'Plan Revision Failure',
     summary:
       'Agent has the right plan but fails to revise it when context changes.',
     shortDescription: 'The plan does not adapt when the evidence changes.',
+    failureMechanism: 'Agent fails to revise a plan when context changes.',
     function: 'Coordinative',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'IE-1': {
     title: 'Individual Metacognitive Blindness',
     summary:
       'Agent does not know what it does not know, and proceeds with false confidence.',
     shortDescription: 'An agent is confident about unsupported claims.',
+    failureMechanism:
+      'Agent proceeds with false confidence, unaware of its gaps.',
     function: 'Epistemic',
-    fixAt: 'runtime'
+    fixAt: ['runtime', 'verify']
   },
 
   // Dyadic
@@ -82,56 +90,68 @@ export const COGNITIVE_FAILURE_TAXONOMY: Record<
     title: 'Semantic & Ontological Misalignment',
     summary: 'Agents use the same word to mean different things.',
     shortDescription: 'The same term means different things to two agents.',
+    failureMechanism: 'Two agents use the same word to mean different things.',
     function: 'Representational',
-    fixAt: 'bootstrap'
+    fixAt: ['bootstrap']
   },
   'DR-2': {
     title: 'Representational Fidelity Loss',
     summary:
       'Information is physically lost or truncated in transit — the receiver never gets what the sender produced.',
     shortDescription: 'Information changes while crossing an interface.',
+    failureMechanism:
+      'Information is truncated or lost in transit; the receiver never gets what was sent.',
     function: 'Representational',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'DC-1': {
     title: 'Communication Policy Inefficiency',
     summary:
       'Agents communicate too much, too little, or with the wrong signal density.',
     shortDescription: 'Agents share too much or too little information.',
+    failureMechanism:
+      'Agents communicate too much, too little, or at the wrong density.',
     function: 'Coordinative',
-    fixAt: 'design'
+    fixAt: ['design']
   },
   'DC-2': {
     title: 'Message Force Misidentification',
     summary:
       'Agent mistakes what kind of speech act it received — a directive treated as a suggestion.',
     shortDescription: 'A required directive is treated as optional advice.',
+    failureMechanism: 'Agent reads a directive as a suggestion.',
     function: 'Coordinative',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'DC-3': {
     title: 'Negotiation & Consensus Failure',
     summary:
       'Agents exchange positions but never issue binding proposals that create obligations.',
     shortDescription: 'Agents exchange positions without converging.',
+    failureMechanism:
+      'Agents exchange positions but issue no binding proposals.',
     function: 'Coordinative',
-    fixAt: 'verify'
+    fixAt: ['runtime', 'verify']
   },
   'DC-4': {
     title: 'Task Delegation Authority Failure',
     summary:
       'Agent delegates a task to the wrong peer because its model of peer capabilities is inaccurate.',
     shortDescription: 'An agent acts without clear execution authority.',
+    failureMechanism:
+      'Agent delegates to the wrong peer via an inaccurate capability model.',
     function: 'Coordinative',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'DE-1': {
     title: 'Peer Knowledge Modeling Failure',
     summary:
       "Agent routes a query to a peer that doesn't hold the knowledge, or misjudges which of several peer replies to trust.",
     shortDescription: 'A task is sent to a peer without the right expertise.',
+    failureMechanism:
+      'Agent routes a query to a peer that does not hold the knowledge.',
     function: 'Epistemic',
-    fixAt: 'design'
+    fixAt: ['design', 'bootstrap', 'runtime']
   },
 
   // Collective
@@ -141,32 +161,38 @@ export const COGNITIVE_FAILURE_TAXONOMY: Record<
       'Agents start with incompatible understandings of what the task requires.',
     shortDescription:
       'The team starts with different understandings of the task.',
+    failureMechanism:
+      'Agents start with incompatible understandings of the task.',
     function: 'Representational',
-    fixAt: 'design'
+    fixAt: ['design']
   },
   'CR-2': {
     title: 'Shared State Degradation',
     summary:
       'Shared memory becomes inconsistent because agents write to it concurrently without coordination.',
     shortDescription: 'Concurrent writes corrupt shared context.',
+    failureMechanism:
+      'Shared memory becomes inconsistent under uncoordinated writes.',
     function: 'Representational',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   'CC-1': {
     title: 'Task Decomposition & Allocation',
     summary:
       "The system's task or role allocation has structural gaps or conflicts — whether roles were defined wrongly or never defined at all.",
     shortDescription: 'Work is left unassigned or assigned twice.',
+    failureMechanism: 'Allocation has structural gaps or conflicts.',
     function: 'Coordinative',
-    fixAt: 'design'
+    fixAt: ['design']
   },
   'CC-2': {
     title: 'Collective Goal Coordination',
     summary:
       'No mechanism exists — at design time or runtime — for agents to jointly hold and coordinate their pursuit of the collective goal.',
     shortDescription: 'The team cannot maintain a common global goal.',
+    failureMechanism: 'No mechanism to hold and pursue a common goal.',
     function: 'Coordinative',
-    fixAt: 'design'
+    fixAt: ['design', 'runtime']
   },
   'CC-3': {
     title: 'Incomplete Synthesis',
@@ -174,16 +200,20 @@ export const COGNITIVE_FAILURE_TAXONOMY: Record<
       'Orchestrator commits a final output without reconciling conflicting sub-agent results.',
     shortDescription:
       'Conflicting specialist outputs are combined without resolution.',
+    failureMechanism:
+      'Orchestrator commits output without reconciling conflicting results.',
     function: 'Coordinative',
-    fixAt: 'verify'
+    fixAt: ['verify']
   },
   'CC-4': {
     title: 'Situational State Synchronization',
     summary:
       'No mechanism broadcasts situational updates to all agents, so models of current state silently diverge during execution.',
     shortDescription: 'New discoveries do not reach the rest of the team.',
+    failureMechanism:
+      'Situational updates are not broadcast; state silently diverges.',
     function: 'Coordinative',
-    fixAt: 'verify'
+    fixAt: ['runtime', 'verify']
   },
   'CE-1': {
     title: 'Verification & Epistemic Control',
@@ -191,8 +221,10 @@ export const COGNITIVE_FAILURE_TAXONOMY: Record<
       'The system commits a confident output without a collective checking step — with or without contradictions present.',
     shortDescription:
       'The system accepts an answer without genuine validation.',
+    failureMechanism:
+      'System commits a confident output with no real checking step.',
     function: 'Epistemic',
-    fixAt: 'verify'
+    fixAt: ['verify']
   },
   'CS-1': {
     title: 'Collective Reasoning Degradation',
@@ -200,8 +232,10 @@ export const COGNITIVE_FAILURE_TAXONOMY: Record<
       'Agents herd toward an early confident output, suppressing independent reasoning.',
     shortDescription:
       'The team suppresses dissent and converges on a wrong answer.',
+    failureMechanism:
+      'Agents herd toward an early confident output, suppressing dissent.',
     function: 'Systemic',
-    fixAt: 'runtime'
+    fixAt: ['runtime']
   },
   // Not on the Cognitive Failure Map.
   'CS-2': {
@@ -232,9 +266,37 @@ export const getCognitiveFailureLabel = (code: string): string => {
 export interface CognitiveFailureMapEntry {
   title: string;
   description: string;
+  failureMechanism: string;
   function: CognitiveFailureFunction;
-  fixAt: CognitiveFailureFixAt;
+  fixAt: CognitiveFailureFixAt[];
 }
+
+// The stages at which a failure can be fixed.
+export const COGNITIVE_FAILURE_FIX_AT: Record<
+  CognitiveFailureFixAt,
+  { label: string; description: string }
+> = {
+  runtime: {
+    label: 'Runtime',
+    description:
+      'Detect and repair the challenge while execution is in progress.'
+  },
+  bootstrap: {
+    label: 'Bootstrap',
+    description:
+      'Prevent the challenge when the agents start, by establishing shared definitions and context.'
+  },
+  design: {
+    label: 'Design',
+    description:
+      'Prevent the challenge in how the system, its roles and its agents are designed.'
+  },
+  verify: {
+    label: 'Verify',
+    description:
+      'Catch the challenge by checking the result before it is committed.'
+  }
+};
 
 export const COGNITIVE_FAILURE_LOCI: {
   value: CognitiveFailureLocus;
@@ -259,13 +321,17 @@ export const COGNITIVE_FAILURE_FUNCTIONS: CognitiveFailureFunction[] = [
 export const COGNITIVE_FAILURE_MAP: Record<string, CognitiveFailureMapEntry> =
   Object.fromEntries(
     Object.entries(COGNITIVE_FAILURE_TAXONOMY).flatMap(([code, entry]) =>
-      entry.shortDescription && entry.function && entry.fixAt
+      entry.shortDescription &&
+      entry.failureMechanism &&
+      entry.function &&
+      entry.fixAt
         ? [
             [
               code,
               {
                 title: entry.title,
                 description: entry.shortDescription,
+                failureMechanism: entry.failureMechanism,
                 function: entry.function,
                 fixAt: entry.fixAt
               }
