@@ -332,7 +332,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Representational',
         confidence: 'high',
         agentsInvolved: 1,
-        whyItHappened:
+        reasoning:
           'The travel plan starts with several constraints, but later steps preserve the destination while dropping details such as trip length, fare limits, or required stops.',
         protocolResponse: {
           protocol: 'ACCORD',
@@ -351,7 +351,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Coordinative',
         confidence: 'medium',
         agentsInvolved: 1,
-        whyItHappened:
+        reasoning:
           'The agent commits to booking the cheapest fare, but a follow-up question about baggage options pulls it away from the commitment and the original goal is never resumed.',
         protocolResponse: {
           protocol: 'ACCORD',
@@ -370,7 +370,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Epistemic',
         confidence: 'medium',
         agentsInvolved: 1,
-        whyItHappened:
+        reasoning:
           'The agent states fare availability with full confidence although no live availability lookup was performed in the session.',
         protocolResponse: {
           protocol: 'CONCORD',
@@ -389,7 +389,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Coordinative',
         confidence: 'low',
         agentsInvolved: 1,
-        whyItHappened:
+        reasoning:
           'After the traveler changes the departure date, the agent keeps executing the original itinerary instead of revising the plan.',
         protocolResponse: {
           protocol: 'ACCORD',
@@ -408,7 +408,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Representational',
         confidence: 'high',
         agentsInvolved: 2,
-        whyItHappened:
+        reasoning:
           'The planner and the booking agent both use "flexible dates", but the planner means ±3 days while the booking agent treats it as any date in the month.',
         protocolResponse: {
           protocol: 'CONCORD',
@@ -427,7 +427,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Coordinative',
         confidence: 'high',
         agentsInvolved: 2,
-        whyItHappened:
+        reasoning:
           'Hotel questions are delegated to the flights agent because its model of peer capabilities is outdated.',
         protocolResponse: {
           protocol: 'CONCORD',
@@ -446,7 +446,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Epistemic',
         confidence: 'medium',
         agentsInvolved: 2,
-        whyItHappened:
+        reasoning:
           'A pricing query is routed to the itinerary agent, which does not hold fare data, and its reply is trusted over the pricing agent.',
         protocolResponse: {
           protocol: 'CONCORD',
@@ -465,7 +465,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Coordinative',
         confidence: 'medium',
         agentsInvolved: 2,
-        whyItHappened:
+        reasoning:
           'The agents exchange fare preferences for several turns but never issue a binding proposal, so no booking obligation is created.',
         protocolResponse: {
           protocol: 'ACCORD',
@@ -484,7 +484,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Representational',
         confidence: 'high',
         agentsInvolved: 3,
-        whyItHappened:
+        reasoning:
           'Each agent starts from a different reading of the request: one optimizes for price, another for travel time, and the third for loyalty points.',
         protocolResponse: {
           protocol: 'ACCORD',
@@ -503,7 +503,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Coordinative',
         confidence: 'medium',
         agentsInvolved: 3,
-        whyItHappened:
+        reasoning:
           'No mechanism lets the agents hold the trip goal jointly, so each pursues its own sub-goal and the combined result misses the budget.',
         protocolResponse: {
           protocol: 'ACCORD',
@@ -522,7 +522,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Coordinative',
         confidence: 'low',
         agentsInvolved: 3,
-        whyItHappened:
+        reasoning:
           'The orchestrator returns a final itinerary without reconciling the conflicting hotel and flight results from its sub-agents.',
         protocolResponse: {
           protocol: 'CONCORD',
@@ -541,7 +541,7 @@ const fetchCognitiveHealthDetails = async (
         category: 'Epistemic',
         confidence: 'medium',
         agentsInvolved: 4,
-        whyItHappened:
+        reasoning:
           'The team commits to a confident itinerary without a collective checking step, even though two agents reported different arrival times.',
         protocolResponse: {
           protocol: 'CONCORD',

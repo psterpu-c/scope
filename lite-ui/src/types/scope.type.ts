@@ -712,8 +712,8 @@ export interface CognitiveFailurePattern {
   /** Traces and spans of the impacted sessions */
   traceCount: number;
   spanCount: number;
-  /** Explanation of why the failure happened */
-  whyItHappened: string;
+  /** Explanation of why the failure happened (reasoning of the CognitiveFailureReport) */
+  reasoning: string;
   protocolResponse: CognitiveFailureProtocolResponse;
   /** Number of sessions impacted by the failure */
   impactedSessionCount: number;

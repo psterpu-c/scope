@@ -250,7 +250,7 @@ export const ApplicationDetailsCognitiveFailures = ({
             variant="body2"
             sx={{ color: mutedText, marginTop: '8px' }}
           >
-            {pattern.whyItHappened}
+            {pattern.reasoning}
           </Typography>
         </Card>
 
