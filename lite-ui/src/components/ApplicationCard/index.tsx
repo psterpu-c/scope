@@ -232,7 +232,7 @@ export const ApplicationCard = ({ application }: ApplicationCardProps) => {
                       {application.detections ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
-                      Detections
+                      Cognitive Detections
                     </Typography>
                   </Stack>
                 }
@@ -262,7 +262,7 @@ export const ApplicationCard = ({ application }: ApplicationCardProps) => {
                       {application.risks ?? 0}
                     </Typography>
                     <Typography variant="caption" sx={{ textAlign: 'center' }}>
-                      Risks
+                      Cognitive Risks
                     </Typography>
                   </Stack>
                 }

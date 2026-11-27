@@ -10,6 +10,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import { formatDurationMs, formatTwoDecimals, getDisplayedResultsCount, getDisplayedResultsCountDollar } from '@/utils';
 import MetricLineChart from '@/components/MetricLineChart';
+import MetricScatterChart from '@/components/MetricScatterChart';
 import { TimelineData, Unit } from '@/types/scope.type';
 import { Operation } from '@/api/metrics';
 import { CustomTooltip } from './CustomTooltip';
@@ -26,9 +27,10 @@ export interface MetricChartProps {
   chartSuffix: string;
   operation: Operation;
   containerSx?: SxProps;
+  chartType?: 'line' | 'scatter';
 }
 
-export const MetricChart = ({ data, metricKey, metricDef, chartSuffix, operation, containerSx }: MetricChartProps) => {
+export const MetricChart = ({ data, metricKey, metricDef, chartSuffix, operation, containerSx, chartType = 'line' }: MetricChartProps) => {
   const theme = useTheme();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [chartHeight, setChartHeight] = useState<number>(150);
@@ -125,16 +127,27 @@ export const MetricChart = ({ data, metricKey, metricDef, chartSuffix, operation
             marginLeft: '8px'
           }}
         >
-          <MetricLineChart
-            data={chartData}
-            metricKey={metricKey}
-            chartSuffix={chartSuffix}
-            agentId={''}
-            metricName={metricDef.name}
-            yAxisProps={yAxisProps}
-            lineColor={getLineColor()}
-            unit={unit}
-          />
+          {chartType === 'scatter' ? (
+            <MetricScatterChart
+              data={chartData}
+              metricKey={metricKey}
+              metricName={metricDef.name}
+              yAxisProps={yAxisProps}
+              color={getLineColor()}
+              unit={unit}
+            />
+          ) : (
+            <MetricLineChart
+              data={chartData}
+              metricKey={metricKey}
+              chartSuffix={chartSuffix}
+              agentId={''}
+              metricName={metricDef.name}
+              yAxisProps={yAxisProps}
+              lineColor={getLineColor()}
+              unit={unit}
+            />
+          )}
         </Stack>
       </Box>
     </Stack>

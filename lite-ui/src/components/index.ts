@@ -24,6 +24,7 @@ export * from './SessionsWithCognitiveFailures';
 export * from './CognitiveFailureMap';
 export * from './SessionsTableIoC';
 export * from './DateInterval';
+export * from './DetectionsStats';
 export * from './SessionMetrics';
 
 export { ApplicationCard, Tags };

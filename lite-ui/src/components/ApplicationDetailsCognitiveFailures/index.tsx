@@ -18,13 +18,13 @@ import {
   Typography,
   useTheme
 } from '@open-ui-kit/core';
-import { CONFIDENCE_LABELS } from '@/common/cognitiveFailureConfidence';
 import { getCognitiveFailureTaxonomy } from '@/common/cognitiveFailureTaxonomy';
 import {
   CognitiveFailureImpactedSession,
   CognitiveFailurePattern,
   CognitiveFailurePatternLevel
 } from '@/types/scope.type';
+import { DetectionsStats } from '../DetectionsStats';
 import { SessionsWithCognitiveFailures } from '../SessionsWithCognitiveFailures';
 
 type LevelFilter = 'all' | CognitiveFailurePatternLevel;
@@ -204,18 +204,6 @@ export const ApplicationDetailsCognitiveFailures = ({
   const renderPatternDetails = (pattern: CognitiveFailurePattern) => {
     const taxonomy = getCognitiveFailureTaxonomy(pattern.code);
     const level = LEVELS.find((item) => item.value === pattern.level);
-    const stats = [
-      {
-        label: 'Impacted sessions',
-        value: pattern.impactedSessionCount
-      },
-      { label: 'Agents involved', value: pattern.agentsInvolved },
-      { label: 'Total alerts', value: pattern.totalAlerts },
-      {
-        label: 'Detection confidence',
-        value: CONFIDENCE_LABELS[pattern.confidence] ?? pattern.confidence
-      }
-    ];
 
     return (
       <Stack direction="column" gap="16px" sx={{ flex: 1, minWidth: 0 }}>
@@ -239,29 +227,14 @@ export const ApplicationDetailsCognitiveFailures = ({
           </Stack>
         </Stack>
 
-        <Stack
-          direction="row"
-          sx={{
-            border: `1px solid ${borderColor}`,
-            borderRadius: '8px'
-          }}
-        >
-          {stats.map((stat, index) => (
-            <Box
-              key={stat.label}
-              sx={{
-                flex: '1 1 0',
-                padding: '12px 16px',
-                borderLeft: index === 0 ? 'none' : `1px solid ${borderColor}`
-              }}
-            >
-              <Typography variant="h5">{stat.value}</Typography>
-              <Typography variant="captionSemibold" sx={{ color: mutedText }}>
-                {stat.label}
-              </Typography>
-            </Box>
-          ))}
-        </Stack>
+        <DetectionsStats
+          applicationId={applicationId}
+          startTime={startTime}
+          endTime={endTime}
+          pattern={pattern}
+          borderColor={borderColor}
+          mutedText={mutedText}
+        />
 
         <Card
           sx={{
@@ -340,13 +313,13 @@ export const ApplicationDetailsCognitiveFailures = ({
         }}
       >
         <Stack direction="column">
-          <Typography variant="body2Semibold">Failure patterns</Typography>
+          <Typography variant="body2Semibold">Cognitive Detections</Typography>
           <Typography variant="captionSemibold" sx={{ color: mutedText }}>
             {`${failurePatterns.length} detected`}
           </Typography>
         </Stack>
         <SearchInput
-          placeholder="Search failure patterns"
+          placeholder="Search detections..."
           value={search}
           onChangeCallback={setSearch}
           sx={{

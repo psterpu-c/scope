@@ -14,14 +14,15 @@ import {
   IntervalPicker,
   MetricChart,
   PageWithTitle,
-  SessionsTableIoC
+  SessionsTableIoC,
+  SessionWithMetrics
 } from '@/components';
 import {
   ApplicationLevelMetricCategoryDescription,
   ApplicationLevelMetricCategoryLabels,
   applicationLevelMetrics
 } from '@/api/applicationLevelMetrics';
-import { useApplicationSummaryMetrics } from '@/api/scopeApi';
+import { useApplicationSummaryMetrics, useSessionsIoC } from '@/api/scopeApi';
 import { pageGradientBottomSx, pageGradientContentSx } from '@/common/styles';
 import { PATHS } from '@/routes/routes.tsx';
 import { useOpenSessionDetails } from '@/hooks/useOpenSessionDetails';
@@ -44,6 +45,9 @@ const apiMetricNameToDefKey: Record<string, string> = {
   CyclesCount: 'cyclesCount',
   WorkflowEfficiency: 'workflowEfficiency'
 };
+
+// The session metrics shown as columns of the sessions table.
+const SESSION_METRIC_KEYS = Object.keys(apiMetricNameToDefKey);
 
 // Metrics that are plain counts rather than percentages
 const scalarMetrics = new Set(['CyclesCount']);
@@ -103,6 +107,40 @@ const ApplicationDetailsPerformance = () => {
     }
     return map;
   }, [applicationSummaryMetrics?.performance]);
+
+  const { data: sessions, isLoading: sessionsLoading } = useSessionsIoC(
+    applicationId,
+    debouncedStartDate,
+    debouncedEndDate
+  );
+
+  // Join of the sessions with the performance metrics. The metric points of the
+  // summary are one per session, at the timestamp of the session. A session
+  // with several values for a metric gets their average, one without gets none.
+  const sessionsWithMetrics = useMemo<SessionWithMetrics[]>(() => {
+    const valuesBySessionTimestamp = new Map<
+      string,
+      Record<string, number[]>
+    >();
+    for (const metric of applicationSummaryMetrics?.performance ?? []) {
+      for (const [timestamp, value] of metric.values) {
+        const key = String(timestamp);
+        const byMetric = valuesBySessionTimestamp.get(key) ?? {};
+        (byMetric[metric.metric_name] ??= []).push(value);
+        valuesBySessionTimestamp.set(key, byMetric);
+      }
+    }
+
+    return (sessions ?? []).map((session) => {
+      const byMetric =
+        valuesBySessionTimestamp.get(String(Number(session.timestamp))) ?? {};
+      const metrics: SessionWithMetrics['metrics'] = {};
+      for (const [name, values] of Object.entries(byMetric)) {
+        metrics[name] = values.reduce((sum, v) => sum + v, 0) / values.length;
+      }
+      return { ...session, metrics };
+    });
+  }, [sessions, applicationSummaryMetrics?.performance]);
 
   const applicationDetailsPath = useMemo(
     () =>
@@ -253,8 +291,10 @@ const ApplicationDetailsPerformance = () => {
           {renderContent()}
           <Box sx={{ width: '100%', overflow: 'auto' }}>
             <SessionsTableIoC
-              applicationId={applicationId}
+              sessions={sessionsWithMetrics}
+              isLoading={sessionsLoading || isLoading}
               onSessionClick={openSessionDetails}
+              metricKeys={SESSION_METRIC_KEYS}
               startTime={debouncedStartDate}
               endTime={debouncedEndDate}
             />

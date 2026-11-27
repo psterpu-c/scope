@@ -27,7 +27,7 @@ import { DateInterval } from '../DateInterval';
 type MRT_ColumnDefList = TableProps<CognitiveFailureImpactedSession>['columns'];
 
 // Columns that can be shown from the table toolbar, but are hidden by default.
-const DEFAULT_HIDDEN_COLUMNS = ['cost', 'agents', 'llms', 'duration'];
+const DEFAULT_HIDDEN_COLUMNS = ['cost', 'agents', 'llms', 'tokens', 'duration'];
 
 const pluralize = (count: number, singular: string): string =>
   `${count} ${singular}${count === 1 ? '' : 's'}`;
@@ -163,6 +163,25 @@ export const SessionsWithCognitiveFailures = ({
             </Stack>
           );
         }
+      },
+      {
+        accessorKey: 'detections',
+        header: 'Detections',
+        size: 120,
+        accessorFn: ({ detections }) => (
+          <Typography variant={'body2'}>{detections}</Typography>
+        ),
+        sortingFn: (rowA, rowB) =>
+          rowA.original.detections - rowB.original.detections
+      },
+      {
+        accessorKey: 'risks',
+        header: 'Risks',
+        size: 120,
+        accessorFn: ({ risks }) => (
+          <Typography variant={'body2'}>{risks}</Typography>
+        ),
+        sortingFn: (rowA, rowB) => rowA.original.risks - rowB.original.risks
       },
       {
         accessorKey: 'tokens',

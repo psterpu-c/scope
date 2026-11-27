@@ -274,8 +274,8 @@ const hashString = (value: string): number => {
 };
 
 // Keeps only the columns of the cognitive failure sessions tables.
-// TODO: the cognition protocols are mocked (derived from the session id), use
-// the real ones once the sessions endpoint returns them.
+// TODO: the cognition protocols, detections and risks are mocked (derived from
+// the session id), use the real ones once the sessions endpoint returns them.
 const toCognitiveFailureSession = (
   session: SessionWithStatefulEval
 ): CognitiveFailureImpactedSession => {
@@ -288,6 +288,8 @@ const toCognitiveFailureSession = (
     llms: session.llms,
     tokens: session.tokens,
     duration: session.duration,
+    detections: hash % 6,
+    risks: (hash >>> 3) % 12,
     cognitionProtocols: [
       { protocol: 'L9-CONCORD', enabled: true, activated: hash % 2 === 0 },
       { protocol: 'L9-ACCORD', enabled: true, activated: hash % 3 !== 0 }

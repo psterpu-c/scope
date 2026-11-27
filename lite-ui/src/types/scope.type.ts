@@ -670,7 +670,8 @@ export type CognitiveFailurePatternLevel =
 /**
  * A session impacted by a failure pattern. Same fields (and units) as the
  * sessions of the sessions table: `timestamp` is epoch seconds as a string,
- * `cost` is in USD and `duration` in milliseconds.
+ * `cost` is in USD and `duration` in milliseconds. `detections` and `risks`
+ * are the number of detections and risks found in the session.
  */
 export type CognitiveFailureImpactedSession = Pick<
   CompletedSessions,
@@ -682,7 +683,10 @@ export type CognitiveFailureImpactedSession = Pick<
   | 'cognitionProtocols'
   | 'tokens'
   | 'duration'
->;
+> & {
+  detections: number;
+  risks: number;
+};
 
 /** How the L9 protocols address a failure pattern. */
 export interface CognitiveFailureProtocolResponse {
