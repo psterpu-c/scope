@@ -82,6 +82,7 @@ const MetricsSection = ({
                     : formatMetricValue(average, catalogEntry.unit)}
                 </Typography>
               }
+              description={catalogEntry.description}
               cardSx={{ width: '100%' }}
             />
           </Grid>
