@@ -219,6 +219,7 @@ const ApplicationDetailsPerformance = () => {
                 metricDef={def}
                 chartSuffix=""
                 operation={def.operation ?? 'average'}
+                chartType="scatter"
               />
             </Grid>
           ))}
